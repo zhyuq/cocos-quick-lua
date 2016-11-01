@@ -13,6 +13,10 @@ color.intToHex = function (intValue)
     return string.format("%06X", intValue)
 end
 
+color.intToc4f = function (intValue)
+    return cc.c4fFromc3b(color.intToc3b(intValue))
+end
+
 color.hexToc3b = function(hex)
   hex = hex:gsub("#", "")
   local r = tonumber(string.sub(hex, 1, 2), 16)
