@@ -1,14 +1,23 @@
---[[
- color 颜色处理
+--[[--
+  color 颜色处理
+  @module color
 ]]
 
-local  color = {}
+local color = {}
 
+---整形转cc.c3b类型
+-- @function color.intToc3b
+-- @param int intValue eg. 0x55cc12
+-- @return cc.c3b
 color.intToc3b = function (intValue)
     local hexStr = string.format("%06X", intValue)
     return color.hexToc3b(hexStr)
 end
 
+---整形转十六进制字符串类型
+-- @function color.intToHex
+-- @param int intValue
+-- @return string eg. "aabbcc"
 color.intToHex = function (intValue)
     return string.format("%06X", intValue)
 end
