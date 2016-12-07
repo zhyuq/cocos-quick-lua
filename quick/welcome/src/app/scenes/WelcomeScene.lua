@@ -13,15 +13,7 @@ function WelcomeScene:ctor()
     self:createTabWidget(bg)
     self:createCopyright(bg)
 
-    local x = handler(self, self.testHanler)
-    printf(x())
 end
-
-function WelcomeScene:testHanler()
-    -- body
-    return "testHanler ======="
-end
-
 
 local function stripPath(path, maxLen)
     local l = string.len(path)
