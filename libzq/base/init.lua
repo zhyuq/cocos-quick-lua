@@ -5,8 +5,9 @@ zq = zq or {}
 
 zq.touch =  import(".touch")
 import(".transform")
-local color = import(".color")
+import(".log")
 
+local color = import(".color")
 zq.color = color
 
 ---整形转cc.c3b类型
