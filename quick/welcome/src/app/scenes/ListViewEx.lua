@@ -83,7 +83,7 @@ function ListViewEx:highlightItem_(item)
     if self.highlightNode_ then
         self.highlightNode_:setVisible(true)
 
-        local y = (self:getItemCount() - self:getItemPos(item) +1) * item:getContentSize().height
+        local y = (self:getItemCount() - self:getItemPos(item)) * item:getContentSize().height
         transition.moveTo(self.highlightNode_, {time = 0.1, x = 0,
                                                             y = y-4,
                                                             easing = "sineOut",

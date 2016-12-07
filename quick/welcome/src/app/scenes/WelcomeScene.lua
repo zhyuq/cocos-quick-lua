@@ -236,16 +236,17 @@ end
 function WelcomeScene:createOpenRecents(recents, node)
     local localProjectListView = require("app.scenes.ListViewEx").new {
             bg = "#TabButtonSelected.png",
-            viewRect = cc.rect(40,92, 40*17, 40*9+28),
+            viewRect = cc.rect(0,0, 40*17, 388),
             direction = cc.ui.UIScrollView.DIRECTION_VERTICAL,
-            scrollbarImgV = "#ScrollBarHandler.png"
+            scrollbarImgV = "#ScrollBarHandler.png",
         }
         :addTo(node)
+    localProjectListView:setPosition(40, 92)
 
     -- hightlight item
     local bgItem = cc.ui.UIImage.new("#ItemSelected.png", {scale9 = true})
     bgItem:setLayoutSize(40*16-20, 87)
-    bgItem:pos(70, 5)
+    bgItem:pos(36, 5)
 
     local highlightNode = display.newNode()
     highlightNode:setVisible(false)
@@ -390,7 +391,7 @@ function WelcomeScene:createSamples(node)
     self.lvGrid = cc.ui.UIListView.new {
         bg = "#TabButtonSelected.png",
         bgScale9 = true,
-        viewRect = cc.rect(40,92, 40*17, 40*9+28),
+        viewRect = cc.rect(0,0, 40*17, 40*9+28),
         direction = cc.ui.UIScrollView.DIRECTION_VERTICAL,
         scrollbarImgV = "#ScrollBarHandler.png"}
 
@@ -405,7 +406,7 @@ function WelcomeScene:createSamples(node)
         end
     end)
 
-
+    self.lvGrid:setPosition(40, 92)
     self.lvGrid:setTouchSwallowEnabled(true)
     self.lvGrid:setVisible(false)
     self.lvGrid:addTo(node)
@@ -444,7 +445,7 @@ function WelcomeScene:createUrlLinks(node)
     self.linkGrid = cc.ui.UIListView.new {
         bg = "#TabButtonSelected.png",
         bgScale9 = true,
-        viewRect = cc.rect(40,92, 40*17, 40*9+28),
+        viewRect = cc.rect(0,0, 40*17, 40*9+28),
         direction = cc.ui.UIScrollView.DIRECTION_VERTICAL,
         scrollbarImgV = "#ScrollBarHandler.png"
     }
@@ -460,7 +461,7 @@ function WelcomeScene:createUrlLinks(node)
         end
     end)
 
-
+    self.linkGrid:setPosition(40, 92)
     self.linkGrid:setTouchSwallowEnabled(true)
     self.linkGrid:setVisible(false)
     self.linkGrid:addTo(node)
@@ -518,15 +519,19 @@ function WelcomeScene:createOneLink(sample, colorVal)
     button:setTouchSwallowEnabled(false)
     button:pos(100, 85)
     button:setButtonSize(190, 140)
+
     local image = display.newSprite(sample.image)
         :addTo(button)
+    image:enableDebugDrawRect(true, true)
     button:addNodeEventListener(cc.NODE_TOUCH_EVENT, function ( event )
             local name, x, y = event.name, event.x, event.y
             if event.name == "began" then
-                if zq.touch.checkTouch(button, cc.rect(0, 0, 190, 140), cc.p(x, y)) then
+                if button:getCascadeBoundingBox():containsPoint(cc.p(x, y)) then
                     image:setScale(1.1)
+
                     return true
                 end
+
                 return false
             elseif event.name == "moved" then
                 image:setScale(1.0)
@@ -629,7 +634,7 @@ function WelcomeScene:createDemoButton(sample)
     button:addNodeEventListener(cc.NODE_TOUCH_EVENT, function ( event )
             local name, x, y = event.name, event.x, event.y
             if event.name == "began" then
-                if zq.touch.checkTouch(button, cc.rect(0, 0, 188, 130), cc.p(x, y)) then
+                if button:getCascadeBoundingBox():containsPoint(cc.p(x, y)) then
                     return true
                 end
 

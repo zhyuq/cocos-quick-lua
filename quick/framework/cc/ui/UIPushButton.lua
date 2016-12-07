@@ -95,7 +95,6 @@ end
 function UIPushButton:onTouch_(event)
     local name, x, y = event.name, event.x, event.y
     if name == "began" then
-        printf("UIPushButton began")
         self.touchBeganX = x
         self.touchBeganY = y
         if self:checkTouchInSprite_(x, y) then
