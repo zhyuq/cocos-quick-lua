@@ -3,4 +3,5 @@
 --]]
 
 import(".NodeEx")
+import(".SpriteEx")
 
