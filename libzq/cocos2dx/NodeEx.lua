@@ -55,6 +55,15 @@ function Node:schedule(callback, interval)
     return action
 end
 
+function Node:scheduleOnce(callback, delay)
+    local action = transition.sequence({
+        cc.DelayTime:create(delay),
+        cc.CallFunc:create(callback),
+    })
+    self:runAction(action)
+    return action
+end
+
 function Node:performWithDelay(callback, delay)
     local action = transition.sequence({
         cc.DelayTime:create(delay),
