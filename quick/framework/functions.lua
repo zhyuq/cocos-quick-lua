@@ -530,10 +530,56 @@ end
 @return function
 
 ]]
-function handler(obj, method)
+function handler_quick(obj, method)
     return function(...)
         return method(obj, ...)
     end
+end
+
+function handler_bind(obj, method, ...)
+    local _handler_num = select('#', ...)
+    local _handler_table = {...}
+    return function(...)
+        if _handler_num == 0 then
+            return method(obj, ...)
+        elseif _handler_num == 1 then
+            return method(obj, _handler_table[1], ...)
+        elseif _handler_num == 2 then
+            return method(obj, _handler_table[1], _handler_table[2], ...)
+        elseif _handler_num == 3 then
+            return method(obj, _handler_table[1], _handler_table[2], _handler_table[3], ...)
+        elseif _handler_num == 4 then
+            return method(obj, _handler_table[1], _handler_table[2], _handler_table[3], _handler_table[4], ...)
+        elseif _handler_num == 5 then
+            return method(obj, _handler_table[1], _handler_table[2], _handler_table[3], _handler_table[4], _handler_table[5], ...)
+        elseif _handler_num == 6 then
+            return method(obj, _handler_table[1], _handler_table[2], _handler_table[3], _handler_table[4], _handler_table[5], _handler_table[6], ...)
+        end
+    end
+end
+
+---  新handle方法的使用， 待详细测试
+-- 1. 和旧的方法用法相同, 兼容旧的
+-- 2. 扩展: 可以直接绑定参数，然后在回掉方法中使用，类似于js中的bind方法
+
+-- function MyScene:ctor()
+--     self.frameTimeCount = 0
+--     -- 注册帧事件
+--     self:addNodeEventListener(cc.ENTER_FRAME_EVENT, handler(self, self.onEnterFrame, param1, ...))
+--     self:scheduleUpdate()
+-- end
+
+-- function MyScene:onEnterFrame(param1, param2, dt)
+--     self.frameTimeCount = self.frameTimeCount + dt
+-- end
+
+
+function handler(obj, method, ...)
+    if select('#', ...) > 0 then
+        return handler_bind(obj, method, ...)
+    end
+
+    return handler_quick(obj, method)
 end
 
 
