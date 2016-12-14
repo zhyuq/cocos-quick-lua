@@ -16,14 +16,14 @@
 	gl.supports_ATITC: false
 	gl.supports_discard_framebuffer: false
 	gl.supports_NPOT: true
-	gl.version: 2.1 INTEL-10.12.13
+	gl.version: 2.1 INTEL-10.14.73
 	gl.supports_S3TC: true
 	gl.supports_OES_depth24: false
 }
 
 
 ------------------------------------------------
-LOAD LUA FILE: /Users/staff/Documents/cocos-quick/merge/cocos-quick/player/quick/samples/websockets/src/main.lua
+LOAD LUA FILE: /Users/staff/Documents/cocos-quick/cocos-quick-lua/quick/samples/websockets/src/main.lua
 ------------------------------------------------
 [LUA-print] ===========================================================
 [LUA-print]               LOAD QUICK FRAMEWORK
@@ -34,7 +34,7 @@ LOAD LUA FILE: /Users/staff/Documents/cocos-quick/merge/cocos-quick/player/quick
 [LUA-print] [INFO] # device.platform              = mac
 [LUA-print] [INFO] # device.model                 = unknown
 [LUA-print] [INFO] # device.language              = cn
-[LUA-print] [INFO] # device.writablePath          = /Users/staff/Documents/cocos-quick/merge/cocos-quick/player/quick/samples/websockets/
+[LUA-print] [INFO] # device.writablePath          = /Users/staff/Documents/cocos-quick/cocos-quick-lua/quick/samples/websockets/
 [LUA-print] [INFO] # device.directorySeparator    = /
 [LUA-print] [INFO] # device.pathSeparator         = :
 [LUA-print] [INFO] #
