@@ -12,7 +12,7 @@ end)
 -- UIImage构建函数
 -- @function ctor
 function UIImage:ctor()
-    self:setCascadeOpacityEnabled()
+    self:setCascadeOpacityEnabled(true)
 end
 
 return UIImage

@@ -31,6 +31,8 @@ function UIButton:ctor()
     self._mode_scale_origin = 1
 
     self._mode_allow_disable = false
+
+    self._time_click = 0
 end
 
 function UIButton:setImage(folder, normal, selected, disabled)
@@ -125,7 +127,7 @@ function UIButton:setState(state)
     elseif state == kUIButtonState.Disabled then
         self:setDisabled()
     else
-        error("UIButton state error: " + tostring(state))
+        error("UIButton state error: " .. tostring(state))
     end
 end
 
@@ -304,16 +306,83 @@ function UIButton:allowTouch()
     return not self:isDisabled() or self._mode_allow_disable
 end
 
+function UIButton:touchDone(touch)
+    local now = zq.time()
+    local off = now - self._time_click
+    self:unschedule(self.emitClick)
+
+    if self._mode_scale_enable then
+        self:setScale(self._mode_scale_origin)
+    end
+
+    if self._delay_callback and self:getTimeOff() >= self._delay_interval then
+        return
+    end
+
+    if not self._dbclick_callback then
+        self:emitClick()
+    elseif self._time_click ~= 0 and off <= 0.27 then
+        self._time_click = 0
+        self:emitDBClick()
+    elseif self:allowEmit() then
+        self._time_click = zq.time()
+        self.scheduleOnceMemberFun(self.emitClick, 0.27)
+    end
+end
+
 function UIButton:onTouchBegan(touch)
     if self:allowTouch() and self:containsTouch(touch) then
         self:emitBegan()
 
         if self._longpress_callback then
-
+            self:scheduleMemberFun(self.emitLongPress, self._longpress_interval)
         end
+
+        if self._delay_callback then
+            self:scheduleOnceMemberFun(self.emitDelay, self._delay_interval)
+        end
+
+        if not self:isDisabled() then
+            self:setSelected()
+        end
+
+        if self._mode_scale_enable then
+            self._mode_scale_origin = self:getScale()
+            self:setScale(self._mode_scale_scale)
+        end
+
+        return true
     end
 
     return false
+end
+
+function UIButton:onTouchMoved(touch)
+    self:unschedule(self.emitDelay)
+    if not self:allowTouch() then
+        return
+    end
+
+    if not self:isNormal() and not self:isDisabled() and not self._moving_callback and self:isTouchOutside() then
+        self:setNormal()
+    end
+
+    self:emitMoving()
+end
+
+function UIButton:onTouchEnded(touch)
+    self:unschedule(self.emitLongPress)
+    self:unschedule(self.emitDelay)
+
+    if not self:allowTouch() then
+        self:emitFinish()
+    else
+        if not self:isDisabled() then
+            self:setNormal()
+            self:touchDone(touch)
+            self:emitFinish()
+        end
+    end
 end
 
 
