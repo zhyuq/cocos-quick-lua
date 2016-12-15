@@ -225,6 +225,7 @@ function WelcomeScene:createTabWidget(node)
 
 end
 
+-- 我的项目
 function WelcomeScene:createOpenRecents(recents, node)
     local localProjectListView = require("app.scenes.ListViewEx").new {
             bg = "#TabButtonSelected.png",
@@ -245,7 +246,7 @@ function WelcomeScene:createOpenRecents(recents, node)
     highlightNode:pos(0, 0)
     highlightNode:addChild(bgItem)
     localProjectListView:setHighlightNode(highlightNode)
-
+    localProjectListView:setTouchSwallowEnabled(true)
     -- add items
     for i,v in ipairs(recents) do
         local container = self:createListItem("#Logo.png", v.title, v.title)
@@ -378,6 +379,7 @@ function WelcomeScene:createTitleBar(node)
     end)
 end
 
+-- 示例
 function WelcomeScene:createSamples(node)
     self.samples = dofile(cc.player.quickRootPath .. "quick/samples/samples.lua")
     self.lvGrid = cc.ui.UIListView.new {
@@ -432,6 +434,7 @@ function WelcomeScene:loadSampleItems()
     self.lvGrid:reload()
 end
 
+--社区动态
 function WelcomeScene:createUrlLinks(node)
     self.myLinks = dofile(cc.player.quickRootPath .. "quick/welcome/src/articles.lua")
     self.linkGrid = cc.ui.UIListView.new {
@@ -441,7 +444,7 @@ function WelcomeScene:createUrlLinks(node)
         direction = cc.ui.UIScrollView.DIRECTION_VERTICAL,
         scrollbarImgV = "#ScrollBarHandler.png"
     }
-
+    self.linkGrid:setTouchSwallowEnabled(true)
     self.linkGrid:onTouch(function(event)
         if not event.listView:isItemInViewRect(event.itemPos) then
             return
@@ -518,7 +521,7 @@ function WelcomeScene:createOneLink(sample, colorVal)
     button:addNodeEventListener(cc.NODE_TOUCH_EVENT, function ( event )
             local name, x, y = event.name, event.x, event.y
             if event.name == "began" then
-                if button:getCascadeBoundingBox():containsPoint(cc.p(x, y)) then
+                if zq.touch.checkTouch(button, cc.rect(-95, -70, 190, 140), cc.p(x, y)) then
                     image:setScale(1.1)
 
                     return true
@@ -626,7 +629,7 @@ function WelcomeScene:createDemoButton(sample)
     button:addNodeEventListener(cc.NODE_TOUCH_EVENT, function ( event )
             local name, x, y = event.name, event.x, event.y
             if event.name == "began" then
-                if button:getCascadeBoundingBox():containsPoint(cc.p(x, y)) then
+                if zq.touch.checkTouch(button, cc.rect(-94, -65, 188, 130), cc.p(x, y)) then
                     return true
                 end
 
