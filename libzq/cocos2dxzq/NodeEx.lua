@@ -7,6 +7,97 @@
 local c = cc
 local Node = c.Node
 
+function Node:scheduleMemberFun(callback, interval)
+    if not self._schedule_callback_list then
+        self._schedule_callback_list = {}
+    end
+
+    local wrapper = nil
+    local callback_action = nil
+    for i, v in ipairs(self._schedule_callback_list) do
+        local  single = v
+        if (v["callback_fn"] == callback) then
+            wrapper = v["wrapper"]
+            callback_action = v["action"]
+            table.remove(self._schedule_callback_list, i)
+            break
+        end
+    end
+
+    if wrapper then
+        self:stopAction(callback_action)
+    end
+
+    wrapper = handler(self, callback)
+    local seq = transition.sequence({
+        cc.DelayTime:create(interval),
+        cc.CallFunc:create(wrapper),
+    })
+    local action = cc.RepeatForever:create(seq)
+    self:runAction(action)
+    table.insert(self._schedule_callback_list, {
+        ["callback_fn"] = callback,
+        ["wrapper"] = wrapper,
+        ["action"] = action
+        })
+
+    return action
+end
+
+function Node:scheduleOnceMemberFun(callback, delay)
+    if not self._schedule_callback_list then
+        self._schedule_callback_list = {}
+    end
+
+    local wrapper = nil
+    local callback_action = nil
+    for i, v in ipairs(self._schedule_callback_list) do
+        local  single = v
+        if (v["callback_fn"] == callback) then
+            wrapper = v["wrapper"]
+            callback_action = v["action"]
+            table.remove(self._schedule_callback_list, i)
+            break
+        end
+    end
+
+    if wrapper then
+        self:stopAction(callback_action)
+    end
+
+    wrapper = handler(self, callback)
+    local action = transition.sequence({
+        cc.DelayTime:create(interval),
+        cc.CallFunc:create(wrapper),
+    })
+    self:runAction(action)
+    table.insert(self._schedule_callback_list, {
+        ["callback_fn"] = callback,
+        ["wrapper"] = wrapper,
+        ["action"] = action
+        })
+
+    return action
+end
+
+function Node:unschedule(callback_fn)
+    local wrapper = nil
+    local callback_action = nil
+    for i, v in ipairs(self._schedule_callback_list) do
+        local  single = v
+        if (v["callback_fn"] == callback) then
+            wrapper = v["wrapper"]
+            callback_action = v["action"]
+            table.remove(self._schedule_callback_list, i)
+            break
+        end
+    end
+
+    if wrapper then
+        self:stopAction(callback_action)
+    end
+end
+
 function Node:getWidth()
     return self:getContentSize().width
 end
