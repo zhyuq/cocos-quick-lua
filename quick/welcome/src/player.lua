@@ -110,7 +110,7 @@ end
 -- args : table
 --
 function player:openProject( title, args )
-    local welcomeTitle = self.quickRootPath .. "player/welcome/"
+    local welcomeTitle = self.quickRootPath .. "quick/welcome/"
     if title == welcomeTitle then return end
 
     local recents = self.settings.PLAYER_OPEN_RECENTS
@@ -348,7 +348,7 @@ function player:init()
     self:registerEventHandler()
     self:readSettings()
 
-    -- record project
+    -- record project 记录打开的工程，也就是保存到~/.quick_player.lua文件中
     if __PLAYER_OPEN_TITLE__ and __PLAYER_OPEN_COMMAND__ then
         local title = string.gsub(__PLAYER_OPEN_TITLE__, '\\', '/')
         local args = string.gsub(__PLAYER_OPEN_COMMAND__, '\\', '/'):splitBySep(' ')
