@@ -328,7 +328,7 @@ function UIButton:touchDone(touch)
         self:emitDBClick()
     elseif self:allowEmit() then
         self._time_click = zq.time()
-        self:scheduleOnceMemberFun(self.emitClick, 0.27)
+        self:scheduleOnce(self.emitClick, 0.27)
     end
 end
 
@@ -339,11 +339,11 @@ function UIButton:onTouchBegan(touch)
         self:emitBegan()
 
         if self._longpress_callback then
-            self:scheduleMemberFun(self.emitLongPress, self._longpress_interval)
+            self:schedule(self.emitLongPress, self._longpress_interval)
         end
 
         if self._delay_callback then
-            self:scheduleOnceMemberFun(self.emitDelay, self._delay_interval)
+            self:scheduleOnce(self.emitDelay, self._delay_interval)
         end
 
         if not self:isDisabled() then
