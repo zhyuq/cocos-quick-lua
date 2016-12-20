@@ -7,7 +7,7 @@
 local c = cc
 local Node = c.Node
 
-function Node:scheduleMemberFun(callback, interval)
+function Node:schedule(callback, interval)
     if not self._schedule_callback_list then
         self._schedule_callback_list = {}
     end
@@ -44,7 +44,7 @@ function Node:scheduleMemberFun(callback, interval)
     return action
 end
 
-function Node:scheduleOnceMemberFun(callback, delay)
+function Node:scheduleOnce(callback, delay)
     if not self._schedule_callback_list then
         self._schedule_callback_list = {}
     end
@@ -80,7 +80,10 @@ function Node:scheduleOnceMemberFun(callback, delay)
     return action
 end
 
-function Node:unschedule(callback_fn)
+---
+-- mixed: callback_fn 对象方法; action: schedule(return value)
+--
+function Node:unschedule(mixed_fn_action)
     if not self._schedule_callback_list then
         return
     end
@@ -89,7 +92,7 @@ function Node:unschedule(callback_fn)
     local callback_action = nil
     for i, v in ipairs(self._schedule_callback_list) do
         local  single = v
-        if (v["callback_fn"] == callback_fn) then
+        if (v["callback_fn"] == mixed_fn_action or v["action"] == mixed_fn_action) then
             wrapper = v["wrapper"]
             callback_action = v["action"]
             table.remove(self._schedule_callback_list, i)

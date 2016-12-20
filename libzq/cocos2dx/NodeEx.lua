@@ -45,33 +45,33 @@ local function isPointIn( rc, pt )
     return cc.rectContainsPoint(rect, pt)
 end
 
-function Node:schedule(callback, interval)
-    local seq = transition.sequence({
-        cc.DelayTime:create(interval),
-        cc.CallFunc:create(callback),
-    })
-    local action = cc.RepeatForever:create(seq)
-    self:runAction(action)
-    return action
-end
+-- function Node:schedule(callback, interval)
+--     local seq = transition.sequence({
+--         cc.DelayTime:create(interval),
+--         cc.CallFunc:create(callback),
+--     })
+--     local action = cc.RepeatForever:create(seq)
+--     self:runAction(action)
+--     return action
+-- end
 
-function Node:scheduleOnce(callback, delay)
-    local action = transition.sequence({
-        cc.DelayTime:create(delay),
-        cc.CallFunc:create(callback),
-    })
-    self:runAction(action)
-    return action
-end
+-- function Node:scheduleOnce(callback, delay)
+--     local action = transition.sequence({
+--         cc.DelayTime:create(delay),
+--         cc.CallFunc:create(callback),
+--     })
+--     self:runAction(action)
+--     return action
+-- end
 
-function Node:performWithDelay(callback, delay)
-    local action = transition.sequence({
-        cc.DelayTime:create(delay),
-        cc.CallFunc:create(callback),
-    })
-    self:runAction(action)
-    return action
-end
+-- function Node:performWithDelay(callback, delay)
+--     local action = transition.sequence({
+--         cc.DelayTime:create(delay),
+--         cc.CallFunc:create(callback),
+--     })
+--     self:runAction(action)
+--     return action
+-- end
 
 function Node:getCascadeBoundingBox()
     local rc
