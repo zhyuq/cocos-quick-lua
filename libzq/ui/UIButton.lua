@@ -37,10 +37,10 @@ end
 
 function UIButton:setImage(folder, normal, selected, disabled)
     selected = selected or normal
-    local ok = self._sp_normal.setImage(fif(folder, folder + "/" + normal, normal))
-    ok = ok and self._sp_selected.setImage(fif(folder, folder + "/" + normal, normal))
+    local ok = self._sp_normal:setImage(fif(folder, folder .. "/" .. normal, normal))
+    ok = ok and self._sp_selected:setImage(fif(folder, folder .. "/" .. selected, selected))
     if disabled then
-        ok = ok and self._sp_disabled.setImage(fif(folder, folder + "/" + disabled, disabled))
+        ok = ok and self._sp_disabled:setImage(fif(folder, folder .. "/" .. disabled, disabled))
     elseif disabled == "" then
 
     end
@@ -100,23 +100,23 @@ end
 
 function UIButton:setNormal()
     self._btn_state = kUIButtonState.Normal
-    self._sp_normal.setVisible(true)
-    self._sp_selected.setVisible(false)
-    self._sp_disabled.setVisible(false)
+    self._sp_normal:setVisible(true)
+    self._sp_selected:setVisible(false)
+    self._sp_disabled:setVisible(false)
 end
 
 function UIButton:setSelected()
     self._btn_state = kUIButtonState.Selected
-    self._sp_normal.setVisible(false)
-    self._sp_selected.setVisible(true)
-    self._sp_disabled.setVisible(false)
+    self._sp_normal:setVisible(false)
+    self._sp_selected:setVisible(true)
+    self._sp_disabled:setVisible(false)
 end
 
 function UIButton:setDisabled()
     self._btn_state = kUIButtonState.Disabled
-    self._sp_normal.setVisible(false)
-    self._sp_selected.setVisible(false)
-    self._sp_disabled.setVisible(true)
+    self._sp_normal:setVisible(false)
+    self._sp_selected:setVisible(false)
+    self._sp_disabled:setVisible(true)
 end
 
 function UIButton:setState(state)
@@ -308,6 +308,8 @@ end
 
 function UIButton:touchDone(touch)
     local now = zq.time()
+    ZQLogE("touchDone = " .. tostring(now))
+    ZQLogE("_time_click = " .. tostring(self._time_click))
     local off = now - self._time_click
     self:unschedule(self.emitClick)
 
@@ -326,11 +328,13 @@ function UIButton:touchDone(touch)
         self:emitDBClick()
     elseif self:allowEmit() then
         self._time_click = zq.time()
-        self.scheduleOnceMemberFun(self.emitClick, 0.27)
+        self:scheduleOnceMemberFun(self.emitClick, 0.27)
     end
 end
 
 function UIButton:onTouchBegan(touch)
+    local now = zq.time()
+    ZQLogE("onTouchBegan = " .. tostring(now))
     if self:allowTouch() and self:containsTouch(touch) then
         self:emitBegan()
 

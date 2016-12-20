@@ -61,13 +61,13 @@ function Node:scheduleOnceMemberFun(callback, delay)
         end
     end
 
-    if wrapper then
+    if not tolua.isnull(callback_action) then
         self:stopAction(callback_action)
     end
 
     wrapper = handler(self, callback)
     local action = transition.sequence({
-        cc.DelayTime:create(interval),
+        cc.DelayTime:create(delay),
         cc.CallFunc:create(wrapper),
     })
     self:runAction(action)
@@ -81,11 +81,15 @@ function Node:scheduleOnceMemberFun(callback, delay)
 end
 
 function Node:unschedule(callback_fn)
+    if not self._schedule_callback_list then
+        return
+    end
+
     local wrapper = nil
     local callback_action = nil
     for i, v in ipairs(self._schedule_callback_list) do
         local  single = v
-        if (v["callback_fn"] == callback) then
+        if (v["callback_fn"] == callback_fn) then
             wrapper = v["wrapper"]
             callback_action = v["action"]
             table.remove(self._schedule_callback_list, i)
@@ -93,7 +97,7 @@ function Node:unschedule(callback_fn)
         end
     end
 
-    if wrapper then
+    if not tolua.isnull(callback_action) then
         self:stopAction(callback_action)
     end
 end
