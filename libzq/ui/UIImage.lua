@@ -15,4 +15,13 @@ function UIImage:ctor()
     self:setCascadeOpacityEnabled(true)
 end
 
+function UIImage:setContentSize(w, h)
+    if not h then
+        h = w.height
+        w = w.width
+    end
+    local func = tolua.getcfunction(self, "setContentSize")
+    func(self, w, h)
+end
+
 return UIImage
