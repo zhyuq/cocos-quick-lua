@@ -112,7 +112,6 @@ end
 
 function UIScale9:layout()
     local size = self:getContentSize()
-    dump(size)
 
     if not self._scale9_image:getTexture() then
         return

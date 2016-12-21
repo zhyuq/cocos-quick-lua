@@ -334,7 +334,6 @@ end
 
 function UIButton:onTouchBegan(touch)
     local now = zq.time()
-    ZQLogE("onTouchBegan = " .. tostring(now))
     if self:allowTouch() and self:containsTouch(touch) then
         self:emitBegan()
 
