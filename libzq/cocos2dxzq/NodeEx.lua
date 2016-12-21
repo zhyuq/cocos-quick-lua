@@ -323,4 +323,13 @@ function Node:setDebugDrawColor(intColor)
     self._debug_draw_rect_color_ = zq.color.intToc4f(intColor)
 end
 
+function Node:setContentSize(width, height)
+    if not height then
+        height = width.height
+        width = width.width
+    end
+    local func = tolua.getcfunction(self, "setContentSize")
+    func(self, width, height)
+end
+
 
