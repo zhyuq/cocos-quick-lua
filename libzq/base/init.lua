@@ -24,6 +24,9 @@ zq.floatEqual = num.floatEqual
 -- @return cc.c3b
 zq.intToc3b = color.intToc3b
 
+import(".CustomActionEx")
+import(".action")
+
 
 function fif(condition, if_true, if_false)
   if condition then return if_true else return if_false end
