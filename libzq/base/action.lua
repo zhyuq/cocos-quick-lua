@@ -44,3 +44,46 @@ cca.actionColor = function (dt, color_from, color_to)
     return zq.ActionColor:create(dt, color_from, color_to)
 end
 
+local ActionTween = class("ActionTween", zq.CustomAction)
+
+function ActionTween:ctor(duration, key, from, to, ...)
+    ActionTween.super.ctor(self)
+    self:initWithDuration(duration, key, from, to, ...)
+end
+
+function ActionTween:initWithDuration(duration, key, from, to, ...)
+    ActionTween.super.initWithDuration(self, duration)
+    self._tween_key     = key
+    self._tween_from    = from
+    self._tween_to      = to
+    self._tween_args    = {...}
+end
+
+function ActionTween:startWithTarget()
+    self:step(0)
+end
+
+function ActionTween:update(percent)
+    local node = self:getTarget()
+
+    local value = (self._tween_to - self._tween_from)*percent + self._tween_from
+    node[self._tween_key](node, value, unpack(self._tween_args))
+end
+
+function ActionTween:create(duration, key, from, to, ...)
+    return zq.ActionTween.new(duration, key, from, to, ...)
+end
+
+zq.ActionTween = ActionTween
+
+---transition.actionTween(sprite, {key = "function_name", from = 1, to = 5, time = 1.5})
+transition.actionTween = function (target, args, ...)
+    assert(not tolua.isnull(target), "transition.actionTween() - target is not cc.Node")
+    local action = zq.ActionTween:create(args.time, args.key, args.from, args.to, ...)
+    return transition.execute(target, action, args)
+end
+
+cca.actionTween = function (duration, key, from, to, ...)
+    return zq.ActionTween:create(duration, key, from, to, ...)
+end
+
