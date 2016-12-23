@@ -24,4 +24,23 @@ function ActionColor:update(percent)
     node:setColor(cc.c3b(red, green, blue))
 end
 
+function ActionColor:create(duration, color_from, color_to)
+    return zq.ActionColor.new(duration, color_from, color_to)
+end
+
 zq.ActionColor = ActionColor
+-- zq.ActionColor.create = function (duration, color_from, color_to)
+--     return zq.ActionColor.new(duration, color_from, color_to)
+-- end
+
+---transition.actionColor(sprite, {color_from = cc.c3b(0, 0, 0), color_to = cc.c3b(255, 200, 300), time = 1.5})
+transition.actionColor = function (target, args)
+    assert(not tolua.isnull(target), "transition.actionColor() - target is not cc.Node")
+    local action = zq.ActionColor:create(args.time, args.color_from, args.color_to)
+    return transition.execute(target, action, args)
+end
+
+cca.actionColor = function (dt, color_from, color_to)
+    return zq.ActionColor:create(dt, color_from, color_to)
+end
+
