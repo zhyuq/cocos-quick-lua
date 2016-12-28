@@ -3,7 +3,7 @@ zq UIScale9Unit 控件
 -- @classmod UIScale9Unit
 
 ]]
-local UIImage = import(".UIImage")
+local UIImage = require("libzq.ui.UIImage")
 
 local UIScale9Unit = class("UIScale9Unit", UIImage)
 
