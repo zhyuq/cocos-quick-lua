@@ -228,6 +228,24 @@ function Node:rectToWorld(rect)
     return cc.rect(origin.x, origin.y, size.width, size.height)
 end
 
+function Node:pointToNode(node, point)
+    local pt = self:convertToWorldSpace(point)
+    pt = node:convertToNodeSpace(pt)
+    return pt
+end
+
+function Node:sizeToNode(node, size)
+    local sz = cc.sizeApplyAffineTransform(size, self:getNodeToWorldAffineTransform())
+    sz = cc.sizeApplyAffineTransform(sz, node:getWorldToNodeAffineTransform())
+    return sz
+end
+
+function Node:rectToNode(node, rect)
+    local origin = self:pointToNode(node, cc.p(rect.x, rect,y))
+    local size = self:sizeToNode(node, cc.size(rect.width, rect.height))
+    return cc.rect(origin.x, origin.y, size.width, size.height)
+end
+
 function Node:stopAllChildrenActions()
     self:stopAllActions()
     local child = self:getChildren()

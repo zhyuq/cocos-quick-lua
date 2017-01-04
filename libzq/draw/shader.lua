@@ -1,5 +1,6 @@
 kShaderTypeDefault          = "ShaderPositionTextureColor_noMVP"
 kShaderTypeGrayscale        = "ShaderTypeGrayscale"
+kShaderTypeMaskSprite       = "ShaderTypeMaskSprite"
 
 local Shader = class("Shader")
 
@@ -14,6 +15,9 @@ function Shader:getShader(shaderType)
         return cc.GLProgramCache:getInstance():getGLProgram(kShaderTypeDefault)
     elseif shaderType == kShaderTypeGrayscale then
         fragSource = kShaderGrayscaleFsh
+        return self:load(vertSource, fragSource, shaderType)
+    elseif shaderType == kShaderTypeMaskSprite then
+        fragSource = kShaderMaskSpriteFsh
         return self:load(vertSource, fragSource, shaderType)
     end
 end
