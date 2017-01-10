@@ -144,6 +144,12 @@ function WelcomeScene:createButtons(node)
         require("app.scenes.OpenProjectUI"):new()
         :addTo(self)
     end)
+
+    local label = zq.UIText.new()
+    label:setText("中文", zq.intToc3b(0xff0000), 25, true)
+    label:setPosition(800, 350)
+    self:addChild(label)
+    label:enableDebugDrawRect(true)
 end
 
 function WelcomeScene:createListItem(icon, title, path)
