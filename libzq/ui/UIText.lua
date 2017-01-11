@@ -99,8 +99,8 @@ function UIText:engine()
         part:setText("")
 
         while text do
-            ZQLogD("text %s", text)
-            ZQLogD("text len: %d", utf8.len(text))
+            -- ZQLogD("text %s", text)
+            -- ZQLogD("text len: %d", utf8.len(text))
             local ch = utf8.sub(text, 1, 1) or ""
             local unicode = utf8.unicode(ch, 1, 1)
             if unicode >= 0x1F300 and unicode <= 0x1F64F then
@@ -109,6 +109,7 @@ function UIText:engine()
 
             local sz = self:charSize(ch, unicode, unit:font(), unit:size())
             height = math.max(height, sz.height)
+            ZQLogD("height === %s", tostring(height))
             unit_h = math.max(unit_h, sz.height)
             if sz.width > w_limit then
                 self._lines = {}
@@ -118,8 +119,9 @@ function UIText:engine()
 
             local is_newline = ch == "\n" or ch == "\r"
             local is_overflow = x_start + width + sz.width > w_limit
-            ZQLogD("is_overflow %s", tostring(is_overflow))
+            -- ZQLogD("is_overflow %s", tostring(is_overflow))
             local is_break = is_newline or is_overflow
+            -- ZQLogD("is_break %s", tostring(is_break))
             local is_last = fif(utf8.len(text) <= 1, true, false)
             local is_finish = k == #self._units and is_last
 
@@ -128,7 +130,7 @@ function UIText:engine()
                 width = width + sz.width
             end
 
-            if (is_last or is_break) and frag then
+            if (is_last or is_break) and string.len(frag) > 0 then
                 part:setText(frag)
                 part:setX(x_start)
                 part:setY(y_start)
@@ -159,6 +161,7 @@ function UIText:engine()
                 frag = ""
                 x_start = x_indent
                 y_start = y_start + height
+                ZQLogD("y_start %s height %s", tostring(y_start), tostring(height))
                 width = 0
                 height = 0
                 cache = {}
@@ -171,7 +174,7 @@ function UIText:engine()
 
             if is_newline or not is_overflow then
                 text = fif(utf8.len(text) > 1, utf8.sub(text, 2), nil)
-                ZQLogD("text new %s", text)
+                -- ZQLogD("text new %s", text)
             end
         end
 
@@ -187,9 +190,8 @@ function UIText:engine()
     local offset = 0
     local distance = 0
     for i, line in ipairs(self._lines) do
-        line  = line
         offset = w_total - line:width()
-        distance = fif(i == 0, 0, self:globalLineSpacing())
+        distance = distance + fif(i == 1, 0, self:globalLineSpacing())
 
         local units = line:units()
         for j, unit in ipairs(units) do
@@ -246,7 +248,7 @@ function UIText:preprocessLines()
     -- for k,v in pairs(lines) do
     --     print(k,v)
     -- end
-    dump(lines[1]["_units"])
+    -- dump(lines[1]["_units"])
     return lines
 end
 
@@ -283,11 +285,11 @@ function UIText:render()
 
     local texture = self:getTexture()
     local size = texture:getContentSize()
-    self:setTextureRect(cc.rect(0, 0, size.width, size.height), false, cc.size(width, height))
+    self:setTextureRect(cc.rect(0, 0, size.width, size.height), false, cc.size(size.width, size.height))
 end
 
 function UIText:charSize(utfChar, unicode, font_name, font_size)
-    if utfChar == "\r" then
+    if utfChar == "\r" or utfChar == "\n" then
         return cc.size(0, 0)
     end
 
@@ -297,6 +299,7 @@ function UIText:charSize(utfChar, unicode, font_name, font_size)
         if find then
             return find
         end
+
 
         local size = zq.ZQTextUtil:getInstance():sizeByFont(utfChar, font_name, font_size)
         self._char_map[key] = size
