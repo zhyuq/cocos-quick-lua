@@ -6,6 +6,7 @@ zq = zq or {}
 zq.touch =  import(".touch")
 import(".transform")
 import(".log")
+import(".adapt")
 
 local time = import(".time")
 zq.time = time.time
@@ -41,11 +42,13 @@ zq.GRAY     = cc.GRAY
 -- @param int intValue
 -- @return cc.c3b
 zq.intToc3b = color.intToc3b
+zq.hexToc3b = color.hexToc3b
 
 import(".CustomActionEx")
 import(".action")
 
 utf8 = import(".utf8")
+html = import(".html")
 
 
 function fif(condition, if_true, if_false)

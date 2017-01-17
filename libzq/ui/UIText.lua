@@ -70,6 +70,61 @@ function UIText:insertText(index, text, font_color, font_size, underline, icon)
     table.insert(self._units, unit)
 end
 
+function UIText:setRichText(text, font_color, font_size)
+    self:removeAllText()
+    self:addRichText(text, font_color, font_size)
+    self:generate()
+end
+
+function UIText:addRichText(text, font_color, font_size)
+    if font_color then
+        self:setGlobalFontColor(font_color)
+    end
+
+    if font_size then
+        self:setGlobalFontSize(font_size)
+    end
+
+    local dealHtml
+    dealHtml = function (html_table)
+        local text_units = {}
+        for i,v in ipairs(html_table) do
+            if type(v) == "table" then
+                local tmp = dealHtml(v)
+                for i,val in ipairs(tmp) do
+                    table.insert(text_units, val)
+                end
+            else
+                local unit = {}
+                local text = v
+                if string.len(text) then
+                    unit["_text"] = text
+                    table.insert(text_units, unit);
+                end
+
+                if (html_table["_attr"]) then
+                    unit["_attr"] = html_table["_attr"]
+                end
+            end
+        end
+
+        return text_units
+    end
+
+    local html_table = html.parsestr(text)
+    local text_units = dealHtml(html_table)
+    for i,unit in ipairs(text_units) do
+        local body = unit["_text"]
+        local attrs = unit["_attr"]
+        local color = attrs and attrs["color"] and zq.hexToc3b(attrs["color"]) or self:globalFontColor()
+        local size = attrs and attrs["size"] or self:globalFontSize()
+        local underline = attrs and attrs["underline"] or "false"
+        local image = attrs and attrs["image"] or nil
+        self:addText(body, color, size, underline == "true", image)
+    end
+
+end
+
 function UIText:generate()
     self:engine();
 
@@ -99,17 +154,18 @@ function UIText:engine()
         part:setText("")
 
         while text do
-            -- ZQLogD("text %s", text)
+            ZQLogD("text %s", text)
             -- ZQLogD("text len: %d", utf8.len(text))
             local ch = utf8.sub(text, 1, 1) or ""
             local unicode = utf8.unicode(ch, 1, 1)
+
             if unicode >= 0x1F300 and unicode <= 0x1F64F then
 
             end
 
             local sz = self:charSize(ch, unicode, unit:font(), unit:size())
+
             height = math.max(height, sz.height)
-            ZQLogD("height === %s", tostring(height))
             unit_h = math.max(unit_h, sz.height)
             if sz.width > w_limit then
                 self._lines = {}
@@ -122,7 +178,7 @@ function UIText:engine()
             -- ZQLogD("is_overflow %s", tostring(is_overflow))
             local is_break = is_newline or is_overflow
             -- ZQLogD("is_break %s", tostring(is_break))
-            local is_last = fif(utf8.len(text) <= 1, true, false)
+            local is_last = fif(utf8.len(text) <= math.max(1, utf8.len(ch)), true, false)
             local is_finish = k == #self._units and is_last
 
             if not is_break then
@@ -173,8 +229,8 @@ function UIText:engine()
             end
 
             if is_newline or not is_overflow then
-                text = fif(utf8.len(text) > 1, utf8.sub(text, 2), nil)
-                -- ZQLogD("text new %s", text)
+                text = fif(utf8.len(text) > utf8.len(ch), utf8.sub(text, math.max(2, utf8.len(ch)+1)), nil)
+                ZQLogD("text new %s", text)
             end
         end
 
@@ -253,29 +309,7 @@ function UIText:preprocessLines()
 end
 
 function UIText:render()
-    -- for k,v in pairs(self._lines) do
-    --     for i,v1 in pairs(v) do
-    --         print(i,v1)
-    --     end
-    -- end
-    function shallowcopy(orig)
-        local orig_type = type(orig)
-        local copy
-        if orig_type == 'table' then
-            copy = {}
-            for orig_key, orig_value in pairs(orig) do
-                if type(orig_value) ~= "function" and tostring(orig_key) ~= "class" then
-                    copy[orig_key] = orig_value
-                end
-            end
-        else -- number, string, boolean, etc
-            copy = orig
-        end
-        return copy
-    end
-
     local lines = self:preprocessLines()
-    -- dump(shallowcopy(self._lines))
     local width = self._final_size.width
     local height = self._final_size.height
     if (not zq.ZQTextUtil:getInstance():renderByArray(self, lines, self._final_size.width, self._final_size.height)) then
@@ -285,7 +319,7 @@ function UIText:render()
 
     local texture = self:getTexture()
     local size = texture:getContentSize()
-    self:setTextureRect(cc.rect(0, 0, size.width, size.height), false, cc.size(size.width, size.height))
+    self:setTextureRect(cc.rect(0, 0, size.width, size.height), false, cc.size(width, height))
 end
 
 function UIText:charSize(utfChar, unicode, font_name, font_size)

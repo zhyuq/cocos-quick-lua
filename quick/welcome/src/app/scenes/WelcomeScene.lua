@@ -146,10 +146,13 @@ function WelcomeScene:createButtons(node)
     end)
 
     local label = zq.UIText.new()
-    label:setText("中文", zq.intToc3b(0xff0000), 25, true)
+    -- label:setGlobalStrokeWidth(3)
+    label:setGlobalStrokeColor(zq.intToc3b(0xff0000))
+    -- label:setLayoutWidth(70)
+    label:setRichText("<font color=#ff0000>红色</font>黄色<font color=#00ff00 size=20 underline=true>绿色\n\r换行</font>", zq.intToc3b(0xffeba7), 20, true)
     label:setPosition(800, 350)
     self:addChild(label)
-    label:enableDebugDrawRect(true)
+    -- label:enableDebugDrawRect(true, zq.intToc3b(0x000000))
 end
 
 function WelcomeScene:createListItem(icon, title, path)
