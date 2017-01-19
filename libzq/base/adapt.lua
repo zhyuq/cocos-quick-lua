@@ -6,7 +6,7 @@
 local Adapt = class("Adapt")
 
 function Adapt:ctor()
-    self._size_screen = cc.GLView:getFrameSize()
+    self._size_screen = cc.Director:getInstance():getOpenGLView():getFrameSize()
     self._aspect_screen = self._size_screen.width/self._size_screen.height
 
     self._size_standard = self:adaptConfig(cc.size(1136, 640), cc.size(960, 640))
@@ -77,7 +77,7 @@ end
 zq.Adapt = Adapt
 
 _S = function (mixed)
-    local ratio = za.Adapt:getInstance():adaptRatio()
+    local ratio = zq.Adapt:getInstance():adaptRatio()
     if type(mixed) == "number" then
         return ratio*mixed;
     elseif type(mixed) == "table" then

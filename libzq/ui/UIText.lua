@@ -26,6 +26,9 @@ function UIText:ctor()
     self._global_strokecolor = zq.intToc3b(0xff0000)
     self._global_strokewidth = 0
     self._global_linespacing = 0
+    self._texture_scale = 1
+
+    self:setTextureScale(math.max(1.0, _S(1.0)))
 end
 
 function UIText:count()
@@ -61,7 +64,7 @@ function UIText:insertText(index, text, font_color, font_size, underline, icon)
     unit:setFont(self:globalFontName())
     unit:setText(text)
     unit:setColor(font_color)
-    unit:setSize(font_size)
+    unit:setSize(font_size*self._texture_scale)
     unit:setUnderline(underline)
     unit:setIcon(icon)
     unit:setStroke(self:globalStrokeColor(), self:globalStrokeWidth())
@@ -125,6 +128,16 @@ function UIText:addRichText(text, font_color, font_size)
 
 end
 
+function UIText:setTextureScale(scale)
+    local func = tolua.getcfunction(self, "setTextureScale")
+    ZQLogD("func %s", tostring(func))
+    if func then
+        func(self, scale)
+    end
+
+    self._texture_scale = scale
+end
+
 function UIText:generate()
     self:engine();
 
@@ -154,7 +167,7 @@ function UIText:engine()
         part:setText("")
 
         while text do
-            ZQLogD("text %s", text)
+            -- ZQLogD("text %s", text)
             -- ZQLogD("text len: %d", utf8.len(text))
             local ch = utf8.sub(text, 1, 1) or ""
             local unicode = utf8.unicode(ch, 1, 1)
@@ -164,7 +177,7 @@ function UIText:engine()
             end
 
             local sz = self:charSize(ch, unicode, unit:font(), unit:size())
-
+            ZQLogD("ch %s width %d height %d", ch, sz.width, sz.height)
             height = math.max(height, sz.height)
             unit_h = math.max(unit_h, sz.height)
             if sz.width > w_limit then
@@ -206,7 +219,7 @@ function UIText:engine()
                 line:append(cache)
                 line:setWidth(x_start)
                 line:setHeight(height)
-                line:setSpacing(self:globalLineSpacing())
+                line:setSpacing(self:globalLineSpacing()*self._texture_scale)
                 table.insert(self._lines, line)
 
                 w_total = math.max(w_total, x_start)
@@ -230,7 +243,7 @@ function UIText:engine()
 
             if is_newline or not is_overflow then
                 text = fif(utf8.len(text) > utf8.len(ch), utf8.sub(text, math.max(2, utf8.len(ch)+1)), nil)
-                ZQLogD("text new %s", text)
+                -- ZQLogD("text new %s", text)
             end
         end
 
@@ -247,7 +260,7 @@ function UIText:engine()
     local distance = 0
     for i, line in ipairs(self._lines) do
         offset = w_total - line:width()
-        distance = distance + fif(i == 1, 0, self:globalLineSpacing())
+        distance = distance + fif(i == 1, 0, self:globalLineSpacing()*self._texture_scale)
 
         local units = line:units()
         for j, unit in ipairs(units) do
@@ -310,16 +323,21 @@ end
 
 function UIText:render()
     local lines = self:preprocessLines()
-    local width = self._final_size.width
-    local height = self._final_size.height
+    local width = self._final_size.width/self._texture_scale
+    local height = self._final_size.height/self._texture_scale
+    ZQLogD("_texture_scale = %f", self._texture_scale)
     if (not zq.ZQTextUtil:getInstance():renderByArray(self, lines, self._final_size.width, self._final_size.height)) then
-        self:clearSprite();
-        return;
+        self:clearSprite()
+        return
     end
 
     local texture = self:getTexture()
     local size = texture:getContentSize()
     self:setTextureRect(cc.rect(0, 0, size.width, size.height), false, cc.size(width, height))
+
+    -- if self._fixed_width then
+    --     self:setWidth(self._fixed_width/self._texture_scale)
+    -- end
 end
 
 function UIText:charSize(utfChar, unicode, font_name, font_size)
@@ -333,7 +351,6 @@ function UIText:charSize(utfChar, unicode, font_name, font_size)
         if find then
             return find
         end
-
 
         local size = zq.ZQTextUtil:getInstance():sizeByFont(utfChar, font_name, font_size)
         self._char_map[key] = size
@@ -382,11 +399,11 @@ function UIText:setGlobalAlignment(alignment)
 end
 
 function UIText:setLayoutWidth(width)
-    self._layout_width = width
+    self._layout_width = width*self._texture_scale
 end
 
 function UIText:setFixedWidth(width)
-    self._fixed_width = width
+    self._fixed_width = width*self._texture_scale
 end
 
 function UIText:globalFontName()

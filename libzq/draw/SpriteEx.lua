@@ -163,6 +163,13 @@ function Sprite:getMaskSprite()
     return nil
 end
 
+function Sprite:setTextureScale(scale)
+    if scale ~= 0 then
+        local func = tolua.getcfunction(self, "setTextureScale")
+        func(self, scale)
+    end
+end
+
 
 
 
