@@ -307,6 +307,10 @@ function class(classname, super)
         cls.__cname = classname
         cls.__ctype = 1
 
+        function cls.classname()
+            return cls.__cname
+        end
+
         function cls.new(...)
             local instance = cls.__create(...)
             -- copy fields from class to native object
@@ -329,6 +333,10 @@ function class(classname, super)
         cls.__cname = classname
         cls.__ctype = 2 -- lua
         cls.__index = cls
+
+        function cls.classname()
+            return cls.__cname
+        end
 
         function cls.new(...)
             local instance = setmetatable({}, cls)
@@ -371,10 +379,27 @@ function iskindof(obj, classname)
     end
 
     while mt do
+        print (mt.__cname)
         if mt.__cname == classname then
             return true
         end
         mt = mt.super
+    end
+
+    return false
+end
+
+function isinstanceof(obj, class)
+    local t = type(class)
+    local classname = ""
+    if t == "table" then
+        classname = class.classname()
+    elseif t == "string" then
+        classname = class
+    end
+
+    if (string.len(classname) >0 ) then
+        return iskindof(obj, classname)
     end
 
     return false

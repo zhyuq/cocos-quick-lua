@@ -33,3 +33,7 @@ function Sprite:playAnimationForever(animation, delay)
     return transition.playAnimationForever(self, animation, delay)
 end
 
+function Sprite:classname()
+    return "cc.Sprite"
+end
+

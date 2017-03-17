@@ -43,3 +43,7 @@ function Scene:markAutoCleanupImage(imageName)
     self.autoCleanupImages_[imageName] = true
     return self
 end
+
+function Scene:classname()
+    return "cc.Scene"
+end

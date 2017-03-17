@@ -563,6 +563,10 @@ function Node:copySpecialPeerVal_(node)
     end
 end
 
+function Node:classname()
+    return "cc.Node"
+end
+
 
 
 
