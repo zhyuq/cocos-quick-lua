@@ -19,9 +19,9 @@ function Sprite:setFrame(plist, frame)
     local spriteFrame = nil
     if frame then
         if plist then
-            spriteFrame = zq.ZQImageManage:getInstance():loadFrame(plist, frame)
+            spriteFrame = zq.ZQImageLoader:getInstance():load_frame(plist, frame)
         else
-            spriteFrame = zq.ZQImageManage:getInstance():loadImage(frame)
+            spriteFrame = zq.ZQImageLoader:getInstance():load_image(frame)
         end
 
         if not spriteFrame then

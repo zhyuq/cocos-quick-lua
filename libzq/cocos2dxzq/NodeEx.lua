@@ -266,7 +266,7 @@ function Node:setChildrenCascadeOpacity(enable)
     self:setCascadeOpacityEnabled(enable)
     local child = self:getChildren()
     for i,v in ipairs(child) do
-        v.setChildrenCascadeOpacity(enable)
+        v:setChildrenCascadeOpacity(enable)
     end
 end
 
@@ -348,6 +348,89 @@ function Node:setContentSize(width, height)
     end
     local func = tolua.getcfunction(self, "setContentSize")
     func(self, width, height)
+end
+
+-- ccbi
+function Node:playCCBI(ccbi, remove, callback)
+    remove = remove or false
+
+    local block = function (time)
+        local handle = function ()
+            if callback then
+                callback()
+            end
+
+            if remove then
+                self:removeFromParent(true)
+            end
+        end
+
+        local action = transition.sequence({
+            cc.DelayTime:create(time),
+            cc.CallFunc:create(handle),
+        })
+
+        if self._ccb_temp then
+            self._ccb_temp:runAction(action)
+        else
+            handle()
+        end
+    end
+
+    if (not self:loadCCBI(ccbi)) then
+        block(0)
+        return 0
+    end
+
+    block(self._ccb_duration)
+    return self._ccb_duration
+end
+
+function Node:loadCCBI(ccbi)
+    self:removeCCBI()
+
+    if (not zq.ZQCCBILoader:getInstance():load(ccbi, true)) then
+        return false
+    end
+
+    local reader = zq.ZQCCBILoader:createCCBReader()
+    self._ccb_host = zq.ZQCCBILoader:getInstance():readNodeGraphFromFile(ccbi, reader)
+    if (self._ccb_host) then
+        self._ccb_host:setPosition(self:center())
+        self._ccb_host:setChildrenCascadeOpacity(true)
+        self:addChild(self._ccb_host)
+
+        local animationManager = reader:getActionManager()
+        local autoPlaySequenceId = animationManager:getAutoPlaySequenceId()
+
+        local ccbSequence = animationManager:getSequence(autoPlaySequenceId)
+        self._ccb_duration = 0
+        if ccbSequence then
+            self._ccb_duration = ccbSequence:getDuration()
+        end
+
+        if (not self._ccb_temp) then
+            self._ccb_temp = cc.Node:create()
+            self:addChild(self._ccb_temp)
+        end
+
+        return true
+    end
+
+    return false
+end
+
+function Node:removeCCBI()
+    if self._ccb_host then
+        self._ccb_host:removeFromParent(true)
+    end
+
+    if self._ccb_temp then
+        self._ccb_temp:removeFromParent(true)
+    end
+
+    self._ccb_host = nil
+    self._ccb_temp = nil
 end
 
 
