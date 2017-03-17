@@ -433,4 +433,21 @@ function Node:removeCCBI()
     self._ccb_temp = nil
 end
 
+function Node:setParticle(plist, particle_type)
+    particle_type = particle_type or cc.POSITION_TYPE_RELATIVE
+
+    if self._particle then
+        self._particle:removeFromParent(true)
+        self._particle = nil
+    end
+
+    if plist and string.len(zq.ZQFileManage:getInstance():load_file(plist)) > 0 then
+        self._particle = cc.ParticleSystemQuad:create(plist)
+        self._particle:setAnchorPoint(0.5, 0.5)
+        self._particle:setPosition(self:center())
+        self._particle:setPositionType(particle_type)
+        self:addChild(self._particle)
+    end
+end
+
 
