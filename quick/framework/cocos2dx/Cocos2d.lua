@@ -199,6 +199,10 @@ function cc.size( _width,_height )
     return { width = _width, height = _height }
 end
 
+function cc.sizeEqualToSize(size1, size2)
+    return (size1 and size2 and (size1.width == size2.width) and (size1.height == size2.height))
+end
+
 --Rect
 function cc.rect(_x,_y,_width,_height)
     return { x = _x, y = _y, width = _width, height = _height }
@@ -381,7 +385,7 @@ end
 
 --PhysicsMaterial
 function cc.PhysicsMaterial(_density, _restitution, _friction)
-	return { density = _density, restitution = _restitution, friction = _friction }
+    return { density = _density, restitution = _restitution, friction = _friction }
 end
 
 local ConfigType =

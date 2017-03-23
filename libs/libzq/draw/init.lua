@@ -3,12 +3,13 @@
 --]]
 
 local CURRENT_MODULE_NAME = ...
+local PACKAGE_NAME = string.sub(CURRENT_MODULE_NAME, 1, -6)
 
-require("libzq.draw.shader_default_fsh")
-require("libzq.draw.shader_default_vsh")
-require("libzq.draw.shader_grayscale_fsh")
-require("libzq.draw.shader_mask_sprite_fsh")
-require("libzq.draw.shader")
-require("libzq.draw.SpriteEx")
+require(PACKAGE_NAME .. ".shader_default_fsh")
+require(PACKAGE_NAME .. ".shader_default_vsh")
+require(PACKAGE_NAME .. ".shader_grayscale_fsh")
+require(PACKAGE_NAME .. ".shader_mask_sprite_fsh")
+require(PACKAGE_NAME .. ".shader")
+require(PACKAGE_NAME .. ".SpriteEx")
 
 

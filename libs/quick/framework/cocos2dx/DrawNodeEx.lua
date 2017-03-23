@@ -22,45 +22,30 @@ THE SOFTWARE.
 
 ]]
 
---------------------------------
--- @module cocos2dx
-
 --[[--
-
-针对 cocos2d-x 的一些封装和扩展
-
-预定义的节点事件：
-
--   cc.NODE_EVENT - enter, exit 等事件
--   cc.NODE_ENTER_FRAME_EVENT - 帧事件
--   cc.NODE_TOUCH_EVENT - 触摸事件
--   cc.NODE_TOUCH_CAPTURE_EVENT - 捕获触摸事件
-
-预定义的层事件：
-
--   cc.ACCELERATE_EVENT - 重力感应事件
--   cc.KEYPAD_EVENT - 硬件按键事件
-
-预定义的触摸模式：
-
--   cc.TOUCH_MODE_ALL_AT_ONCE - 多点触摸
--   cc.TOUCH_MODE_ONE_BY_ONE - 单点触摸
 
 ]]
 
-local p = cc.PACKAGE_NAME .. ".cocos2dx."
+local c = cc
+local DrawNode = c.DrawNode
 
-if not cc.p then
--- cc.p exist, so the cocos.init have loaded
-require(p .. "Cocos2dConstants")
-require(p .. "OpenglConstants")
-require(p .. "Cocos2d")
-require(p .. "StudioConstants")
+local drawPolygon = DrawNode.drawPolygon
+function DrawNode:drawPolygon(points, params)
+    local segments = #points
+    fillColor = cc.c4f(1,1,1,1)
+    borderWidth  = 0
+    borderColor  = cc.c4f(0,0,0,1)
+    if params then
+        if params.fillColor then fillColor = params.fillColor end
+        if params.borderWidth then borderWidth = params.borderWidth end
+        if params.borderColor then borderColor = params.borderColor end
+    end
+    drawPolygon(self, points, #points, fillColor, borderWidth, borderColor)
+    return self
 end
 
-require(p .. "Event")
-require(p .. "ActionEx")
-require(p .. "NodeEx")
-require(p .. "SceneEx")
-require(p .. "SpriteEx")
-require(p .. "DrawNodeEx")
+local drawDot = DrawNode.drawDot
+function DrawNode:drawDot(point, radius, color)
+    drawDot(self, point, radius, color)
+    return self
+end

@@ -1,6 +1,6 @@
 
 require("config")
-require("framework.init")
+require("libs.init")
 
 local WelcomeApp = class("WelcomeApp", cc.mvc.AppBase)
 
