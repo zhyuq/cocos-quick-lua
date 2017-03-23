@@ -433,6 +433,66 @@ function Node:removeCCBI()
     self._ccb_temp = nil
 end
 
+function Node:ccbiHost()
+    return self._ccb_host
+end
+
+function Node:ccbiVisit(callback, cls)
+    local store = {}
+    local block = function (node)
+        if (not cls or isinstanceof(node, cls)) then
+            table.insert(store, node)
+        end
+
+        local children = node:getChildren()
+        for k,v in pairs(children) do
+            block(v)
+        end
+    end
+
+    if self._ccb_host then
+        block(self._ccb_host)
+    end
+
+    for k,v in pairs(store) do
+        callback(v)
+    end
+end
+
+function Node:ccbiChildren(cls)
+    local store = {}
+    self:ccbiVisit(function (node)
+        table.insert(store, node)
+    end, cls)
+
+    return store
+end
+
+function Node:ccbiRect()
+    local rect = nil
+    self:ccbiVisit(function (node)
+        local temp = cc.rect(0, 0, node:getWidth(), node:getHeight())
+        temp = ndoe:rectToNode(self, temp)
+
+        if rect then
+            rect = cc.rectUnion(rect, temp)
+        else
+            rect = temp
+        end
+    end)
+
+    if rect then
+        return rect
+    else
+        return cc.rect(0, 0, 0, 0)
+    end
+end
+
+function Node:ccbiSize()
+    local rect = self:ccbiRect()
+    return cc.size(rect.width, rect.height)
+end
+
 function Node:setParticle(plist, particle_type)
     particle_type = particle_type or cc.POSITION_TYPE_RELATIVE
 
