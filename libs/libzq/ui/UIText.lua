@@ -23,9 +23,11 @@ function UIText:ctor()
 
     self._global_fontname = zq.ZQTextUtil:getInstance():standardFontName()
     self._global_fontcolor = cc.WHITE
+    self._global_fontsize = 23.0
     self._global_strokecolor = zq.intToc3b(0xff0000)
     self._global_strokewidth = 0
     self._global_linespacing = 0
+    self._global_alignment = kZQTextAlignment.Left
     self._texture_scale = 1
 
     self:setTextureScale(math.max(1.0, _S(1.0)))
@@ -177,7 +179,7 @@ function UIText:engine()
             end
 
             local sz = self:charSize(ch, unicode, unit:font(), unit:size())
-            ZQLogD("ch %s width %d height %d", ch, sz.width, sz.height)
+            -- ZQLogD("ch %s width %d height %d", ch, sz.width, sz.height)
             height = math.max(height, sz.height)
             unit_h = math.max(unit_h, sz.height)
             if sz.width > w_limit then
@@ -325,7 +327,7 @@ function UIText:render()
     local lines = self:preprocessLines()
     local width = self._final_size.width/self._texture_scale
     local height = self._final_size.height/self._texture_scale
-    ZQLogD("_texture_scale = %f", self._texture_scale)
+    -- ZQLogD("_texture_scale = %f", self._texture_scale)
     if (not zq.ZQTextUtil:getInstance():renderByArray(self, lines, self._final_size.width, self._final_size.height)) then
         self:clearSprite()
         return

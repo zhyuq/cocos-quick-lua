@@ -42,7 +42,7 @@ end
 function Sprite:clearSprite()
     self._image_plist = nil
     self._image_frame = nil
-    self:setTexture(nil)
+    self:setTexture(cc.Texture2D:new())
     self:setTextureRect(cc.rect(0, 0, 0, 0))
     self:setContentSize(self:getContentSize())
 end

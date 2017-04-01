@@ -7,4 +7,7 @@ function __G__TRACKBACK__(errorMessage)
 end
 
 require("prefix")
-require("app.WelcomeApp").new():run()
+
+ZYWorld:getInstance():change(ZYSceneDebug)
+
+
