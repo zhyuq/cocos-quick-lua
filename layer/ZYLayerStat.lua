@@ -44,7 +44,6 @@ function ZYLayerStat:stop()
 end
 
 function ZYLayerStat:update(dt)
-    ZQLogD("ZYLayerStat update")
     local text = self._stat_version .. "\n"
     text = text .. string.format("%.1f fps", cc.Director:getInstance():getFrameRate())
 

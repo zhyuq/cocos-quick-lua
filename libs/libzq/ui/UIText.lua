@@ -28,9 +28,8 @@ function UIText:ctor()
     self._global_strokewidth = 0
     self._global_linespacing = 0
     self._global_alignment = kZQTextAlignment.Left
-    self._texture_scale = 1
-
-    self:setTextureScale(math.max(1.0, _S(1.0)))
+    self._texture_scale = math.max(1.0, _S(1.0))
+    self:setTextureScale(self._texture_scale)
 end
 
 function UIText:count()
@@ -132,7 +131,6 @@ end
 
 function UIText:setTextureScale(scale)
     local func = tolua.getcfunction(self, "setTextureScale")
-    ZQLogD("func %s", tostring(func))
     if func then
         func(self, scale)
     end
@@ -232,7 +230,7 @@ function UIText:engine()
                 frag = ""
                 x_start = x_indent
                 y_start = y_start + height
-                ZQLogD("y_start %s height %s", tostring(y_start), tostring(height))
+                -- ZQLogD("y_start %s height %s", tostring(y_start), tostring(height))
                 width = 0
                 height = 0
                 cache = {}

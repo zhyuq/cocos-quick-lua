@@ -8,13 +8,14 @@ local Adapt = class("Adapt")
 function Adapt:ctor()
     self._size_screen = cc.Director:getInstance():getOpenGLView():getFrameSize()
     self._aspect_screen = self._size_screen.width/self._size_screen.height
-
+    -- ZQLogD("_aspect_screen = %f", self._aspect_screen)
     self._size_standard = self:adaptConfig(cc.size(1136, 640), cc.size(960, 640))
 
     self._ratio_width = self._size_screen.width / self._size_standard.width
     self._ratio_height = self._size_screen.height / self._size_standard.height
 
-    self._ratio_refer = "h"
+    -- ZQLogD("_ratio_height %f", self._ratio_height)
+    self._ratio_refer = "w"
 end
 
 function Adapt:screenSize()
@@ -51,10 +52,10 @@ function Adapt:isWideScreen()
 end
 
 function Adapt:adaptRatio()
-    if self._ratio_refer == "h" then
-        return self._ratio_height
-    else
+    if self._ratio_refer == "w" then
         return self._ratio_width
+    else
+        return self._ratio_height
     end
 end
 
@@ -78,6 +79,7 @@ zq.Adapt = Adapt
 
 _S = function (mixed)
     local ratio = zq.Adapt:getInstance():adaptRatio()
+    -- ZQLogD("ratio %f", ratio)
     if type(mixed) == "number" then
         return ratio*mixed;
     elseif type(mixed) == "table" then

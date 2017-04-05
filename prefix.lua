@@ -1,5 +1,6 @@
 require("libs.init")
 
+require("setup")
 require("scenes.ZYScene")
 require("scenes.ZYSceneDebug")
 
