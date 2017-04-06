@@ -12,23 +12,23 @@ function ZYSceneDebug:init()
     self._host:addChild(bg)
 
     bg:playCCBI("ccbi_ui/金丹－红.ccbi")
-    -- local box = zq.ZQTextBox:create(cc.size(100, 50))
+    local box1 = zq.ZQTextBox:create(cc.size(100, 50))
+    box1:setContentSize(cc.size(100, 50))
+    box1:setAnchorPoint(cc.p(0.5, 0.5))
+    box1:setPosition(self:center())
+    self._host:addChild(box1)
+
+    local box2 = zq.ZQTextBox:create(cc.size(100, 50))
+    box2:setContentSize(cc.size(100, 50))
+    box2:setAnchorPoint(cc.p(0.5, 0.5))
+    box2:setPosition(cc.p(self:centerX(), self:centerY()+100))
+    self._host:addChild(box2)
+
+    -- local box = zq.ZQTextArea:create(cc.size(100, 50))
     -- box:setContentSize(cc.size(100, 50))
     -- box:setAnchorPoint(cc.p(0.5, 0.5))
-    -- box:setPosition(self:center())
+    -- box:setPosition(cc.p(self:centerX(), self:centerY()))
     -- self._host:addChild(box)
-
-    -- local box = zq.ZQTextBox:create(cc.size(100, 50))
-    -- box:setContentSize(cc.size(100, 50))
-    -- box:setAnchorPoint(cc.p(0.5, 0.5))
-    -- box:setPosition(cc.p(self:centerX(), self:centerY()+100))
-    -- self._host:addChild(box)
-
-     local box = zq.ZQTextArea:create(cc.size(100, 50))
-    box:setContentSize(cc.size(100, 50))
-    box:setAnchorPoint(cc.p(0.5, 0.5))
-    box:setPosition(cc.p(self:centerX(), self:centerY()))
-    self._host:addChild(box)
 
     local label = zq.UIText.new()
     -- label:setGlobalStrokeWidth(3)
@@ -39,6 +39,12 @@ function ZYSceneDebug:init()
     label:setPosition(600, 100)
     self:addChild(label)
     label:enableDebugDrawRect(true, zq.intToc3b(0x000000))
+
+    ZYStorage:getInstance():set("test_storage_1", {a="b", [1] = 3}, true)
+    ZQLogD("test_storage_1 %s", tostring(ZYStorage:getInstance():get("test_storage_1")))
+    dump(ZYStorage:getInstance():get("test_storage_1"))
+
+    ZQLogD("serialize %s", table.serialize({[2] = "b", [1] = "a", [3] = "c", [26] = "z", b = "5",}))
 end
 
 function ZYSceneDebug:initMemVar()

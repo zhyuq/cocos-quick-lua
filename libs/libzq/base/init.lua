@@ -49,6 +49,7 @@ import(".action")
 
 utf8 = import(".utf8")
 html = import(".html")
+import(".serialize")
 
 zq.Object = import(".object")
 
