@@ -8,6 +8,11 @@ end
 
 require("prefix")
 
-ZYWorld:getInstance():change(ZYSceneDebug)
+function main()
+    ZYWorld:getInstance():change(ZYSceneDebug)
+end
+
+xpcall(main, __G__TRACKBACK__)
+
 
 

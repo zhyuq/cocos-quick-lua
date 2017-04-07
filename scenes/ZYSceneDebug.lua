@@ -48,20 +48,24 @@ function ZYSceneDebug:init()
 
     -- ZYStorage:getInstance():del("test_storage_1", true)
 
-    local video = ZYVideo.new()
-    self:addChild(video)
-    video:play("video/kaitou.mp4")
-    video:bind(function ( ... )
-        video:removeFromParent()
-    end)
 
-    local touch = zq.UIButton.new()
-    touch:setAnchorPoint(0, 0)
-    touch:setContentSize(self:getContentSize())
-    touch:bindDBClick(function ( ... )
-        video:removeFromParent(true)
-    end)
-    self:addChild(touch)
+    -- video test
+    -- local video = ZYVideo.new()
+    -- self:addChild(video)
+    -- video:play("video/kaitou.mp4")
+    -- video:bind(function ( ... )
+    --     video:removeFromParent()
+    -- end)
+
+    -- local touch = zq.UIButton.new()
+    -- touch:setAnchorPoint(0, 0)
+    -- touch:setContentSize(self:getContentSize())
+    -- touch:bindDBClick(function ( ... )
+    --     video:removeFromParent(true)
+    -- end)
+    -- self:addChild(touch)
+
+    error("error test ... ")
 end
 
 function ZYSceneDebug:initMemVar()
