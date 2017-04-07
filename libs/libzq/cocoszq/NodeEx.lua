@@ -8,6 +8,7 @@ local c = cc
 local Node = c.Node
 
 function Node:schedule(callback, interval)
+    interval = interval or 0
     if not self._schedule_callback_list then
         self._schedule_callback_list = {}
     end
@@ -45,6 +46,7 @@ function Node:schedule(callback, interval)
 end
 
 function Node:scheduleOnce(callback, delay)
+    delay = delay or 0
     if not self._schedule_callback_list then
         self._schedule_callback_list = {}
     end

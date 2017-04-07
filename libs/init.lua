@@ -103,6 +103,7 @@ function import(moduleName, currentModuleName)
     return require(moduleFullName)
 end
 
+require("libs.cocos.init")
 require("libs.quick.framework.init")
 require("libs.libzq.init")
 

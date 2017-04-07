@@ -40,11 +40,28 @@ function ZYSceneDebug:init()
     self:addChild(label)
     label:enableDebugDrawRect(true, zq.intToc3b(0x000000))
 
-    ZYStorage:getInstance():set("test_storage_1", {a="b", [1] = 3}, true)
-    ZQLogD("test_storage_1 %s", tostring(ZYStorage:getInstance():get("test_storage_1")))
-    dump(ZYStorage:getInstance():get("test_storage_1"))
+    -- ZYStorage:getInstance():set("test_storage_1", {a="b", [1] = 3}, true)
+    -- ZQLogD("test_storage_1 %s", tostring(ZYStorage:getInstance():get("test_storage_1")))
+    -- dump(ZYStorage:getInstance():get("test_storage_1"))
 
-    ZQLogD("serialize %s", table.serialize({[2] = "b", [1] = "a", [3] = "c", [26] = "z", b = "5",}))
+    -- ZQLogD("serialize %s", table.serialize({[2] = "b", [1] = "a", [3] = "c", [26] = "z", b = "5",}))
+
+    -- ZYStorage:getInstance():del("test_storage_1", true)
+
+    local video = ZYVideo.new()
+    self:addChild(video)
+    video:play("video/kaitou.mp4")
+    video:bind(function ( ... )
+        video:removeFromParent()
+    end)
+
+    local touch = zq.UIButton.new()
+    touch:setAnchorPoint(0, 0)
+    touch:setContentSize(self:getContentSize())
+    touch:bindDBClick(function ( ... )
+        video:removeFromParent(true)
+    end)
+    self:addChild(touch)
 end
 
 function ZYSceneDebug:initMemVar()

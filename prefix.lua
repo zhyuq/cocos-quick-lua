@@ -1,6 +1,7 @@
 require("libs.init")
 
 require("base.ZYStorage")
+require("base.ZYVideo")
 
 require("setup")
 require("scenes.ZYScene")
