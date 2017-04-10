@@ -13,7 +13,6 @@ function ZYScene:ctor()
     self._layer_stat = ZYLayerStat.new()
     self._host:addChild(self._layer_stat, zq.Int32Max)
 
-    ZQLogD("ZYScene .... ")
     self:setNodeEventEnabled(true)
 end
 

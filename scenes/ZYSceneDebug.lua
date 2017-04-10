@@ -16,7 +16,7 @@ function ZYSceneDebug:init()
     box1:setContentSize(cc.size(100, 50))
     box1:setAnchorPoint(cc.p(0.5, 0.5))
     box1:setPosition(self:center())
-    self._host:addChild(box1)
+    self:addChild(box1)
 
     local box2 = zq.ZQTextBox:create(cc.size(100, 50))
     box2:setContentSize(cc.size(100, 50))
@@ -37,7 +37,7 @@ function ZYSceneDebug:init()
     local translate = zq.Locale.translate;
     label:setRichText(zq.Locale:getInstance():translate("<font color=#ff0000>移除</font>黄色<font color=#00ff00 size=20 underline=true>绿Xx色\n换行乐</font>天排55566"), zq.intToc3b(0xffffff), 18, true)
     label:setPosition(600, 100)
-    self:addChild(label)
+    self._host:addChild(label)
     label:enableDebugDrawRect(true, zq.intToc3b(0x000000))
 
     -- ZYStorage:getInstance():set("test_storage_1", {a="b", [1] = 3}, true)
@@ -65,7 +65,13 @@ function ZYSceneDebug:init()
     -- end)
     -- self:addChild(touch)
 
-    error("error test ... ")
+    local img = zq.UIImage.new()
+    img:setImage("ui_role_bag_new/人物标题.png")
+    img:setAnchorPoint(0.5, 0.5)
+    img:setPosition(self:center())
+    self._host:addChild(img)
+
+    ZYUIController:getInstance():open(ZYUIDebug)
 end
 
 function ZYSceneDebug:initMemVar()
