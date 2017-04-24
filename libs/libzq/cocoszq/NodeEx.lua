@@ -107,6 +107,23 @@ function Node:unschedule(mixed_fn_action)
     end
 end
 
+function Node:unscheduleAllCallbacks()
+    if not self._schedule_callback_list then
+        return
+    end
+
+    for i=#self._schedule_callback_list,1,-1 do
+        local single = self._schedule_callback_list[i]
+        local action = single["action"]
+
+        if not tolua.isnull(action) then
+            self:stopAction(action)
+        end
+
+        table.remove(self._schedule_callback_list, i)
+    end
+end
+
 function Node:getWidth()
     return self:getContentSize().width
 end

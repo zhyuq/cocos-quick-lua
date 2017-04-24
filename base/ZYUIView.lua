@@ -13,6 +13,17 @@ function ZYUIView:hideKeyboard()
     zq.ZQDeviceInfo:getInstance():keyboard_close()
 end
 
+function ZYUIView:dragdrop()
+    if not self._dragdrop then
+        self._dragdrop = zq.UIDragDrop.new()
+        self._dragdrop:setAnchorPoint(0, 0)
+        self._dragdrop:setPosition(0, 0)
+        self:addChild(self._dragdrop, zq.Int32Max)
+    end
+
+    return self._dragdrop
+end
+
 function ZYUIView:onEnter()
 
 end

@@ -39,7 +39,7 @@ end
 
 function UITouch:containsPoint(point)
     local rc = self:getTouchAreaRect()
-    return zq.touch.checkTouch(self, rc, point)
+    return zq.Touch.checkTouch(self, rc, point)
 end
 
 function UITouch:isTouchOutside()

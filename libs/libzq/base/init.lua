@@ -3,7 +3,7 @@
 ]]
 zq = zq or {}
 
-zq.touch =  import(".touch")
+zq.Touch =  import(".touch")
 import(".transform")
 import(".log")
 import(".adapt")

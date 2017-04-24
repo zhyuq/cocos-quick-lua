@@ -361,7 +361,7 @@ function iskindof(obj, classname)
     end
 
     while mt do
-        print (mt.__cname)
+        -- print (mt.__cname)
         if mt.__cname == classname then
             return true
         end
