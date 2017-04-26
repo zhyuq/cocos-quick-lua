@@ -46,7 +46,7 @@ function UIDragDropInfo:setPlace(refer)
     end
 
     if refer then
-        local point = refer:convertToNodeSpace(self._touch["nowPos"])
+        local point = refer:convertToNodeSpace(self._touch:getLocation())
         point.x = fif(refer:getWidth() > 0, point.x / refer:getWidth(), 0.5)
         point.y = fif(refer:getHeight() > 0, point.y / refer:getHeight(), 0.5)
 
@@ -54,7 +54,7 @@ function UIDragDropInfo:setPlace(refer)
     end
 
     self._place = true
-    self._image:setPosition(self._touch["nowPos"])
+    self._image:setPosition(self._touch:getLocation())
 end
 
 function UIDragDropInfo:setOverlapPos(pos)

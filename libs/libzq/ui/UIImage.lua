@@ -5,7 +5,7 @@ zq UIImage控件
 ]]
 
 local UIImage = class("UIImage", function()
-        return cc.Sprite:create()
+    return cc.Sprite:create()
 end)
 
 --------------------------------
@@ -13,6 +13,7 @@ end)
 -- @function ctor
 function UIImage:ctor()
     self:setCascadeOpacityEnabled(true)
+    self:setNodeEventEnabled(true)
 end
 
 function UIImage:setContentSize(w, h)
@@ -22,6 +23,18 @@ function UIImage:setContentSize(w, h)
     end
     local func = tolua.getcfunction(self, "setContentSize")
     func(self, w, h)
+end
+
+function UIImage:isDestroyed()
+    return self._destroyed or false
+end
+
+function UIImage:onEnter()
+    self._destroyed = false
+end
+
+function UIImage:onExit()
+    self._destroyed = true
 end
 
 return UIImage

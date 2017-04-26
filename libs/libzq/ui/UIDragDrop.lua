@@ -12,11 +12,11 @@ function UIDragDrop:ctor()
     self._detectDisInterval = 5
     self._detectNextTime = zq.time()
 
-    self:setTouchSwallowEnabled(false)
+    self:setTouchSwallow(false)
 end
 
 function UIDragDrop:onExit()
-
+    UIDragDrop.super.ctor(self)
 end
 
 function UIDragDrop:register(node)
@@ -48,7 +48,7 @@ function UIDragDrop:isDragging()
     return self._dragging
 end
 
-function UIDragDrop:onTouchBegan(touch)
+function UIDragDrop:onTouchBegan(touch, event)
     self._dragging = false
     if (not self:isRunning()) or (not self:detectSource(touch)) then
         return false
@@ -61,7 +61,7 @@ function UIDragDrop:onTouchBegan(touch)
     end
 end
 
-function UIDragDrop:onTouchMoved(touch)
+function UIDragDrop:onTouchMoved(touch, event)
     if self._ignore then
         return
     end
@@ -100,8 +100,8 @@ function UIDragDrop:onTouchMoved(touch)
             self._source:dragging(self._source, self._target)
         end
 
-        if (not self._detectDisPreTouch) or cc.pGetDistance(self._detectDisPreTouch, touch["nowPos"]) > self._detectDisInterval then
-            self._detectDisPreTouch = cc.p(touch["nowPos"].x, touch["nowPos"].y)
+        if (not self._detectDisPreTouch) or cc.pGetDistance(self._detectDisPreTouch, touch:getLocation()) > self._detectDisInterval then
+            self._detectDisPreTouch = cc.p(touch:getLocation().x, touch:getLocation().y)
             if not self:detectTarget(touch, true) then
                 return
             end
@@ -117,15 +117,15 @@ function UIDragDrop:onTouchMoved(touch)
             self._detectDisPreTouch = nil
         end
     else
-        self._detectPreTouch = cc.p(touch["nowPos"].x, touch["nowPos"].y)
+        self._detectPreTouch = cc.p(touch:getLocation().x, touch:getLocation().y)
     end
 end
 
-function UIDragDrop:onTouchEnded(touch)
+function UIDragDrop:onTouchEnded(touch, event)
     self:touchDone(touch)
 end
 
-function UIDragDrop:touchDone(touch)
+function UIDragDrop:touchDone(touch, event)
     self:detectTarget(touch)
 
     local on_source = false
@@ -159,7 +159,6 @@ function UIDragDrop:detectSource(touch)
             node:allowDrag(info)
 
             if info:image() then
-                ZQLogD("detectSource .... ")
                 info:setPlace(node)
                 self._image = info:image()
                 self._source = node
@@ -178,9 +177,7 @@ function UIDragDrop:detectSource(touch)
 end
 
 function UIDragDrop:moveImage(touch)
-    ZQLogD("touch posX %d", touch["nowPos"].x)
-    ZQLogD("touch posY %d", touch["nowPos"].y)
-    self._image:setPosition(touch["nowPos"])
+    self._image:setPosition(touch:getLocation())
 end
 
 function UIDragDrop:pushSourceInfo(touch)

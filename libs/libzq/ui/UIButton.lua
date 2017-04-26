@@ -308,8 +308,6 @@ end
 
 function UIButton:touchDone(touch)
     local now = zq.time()
-    ZQLogE("touchDone = " .. tostring(now))
-    ZQLogE("_time_click = " .. tostring(self._time_click))
     local off = now - self._time_click
     self:unschedule(self.emitClick)
 
@@ -332,7 +330,7 @@ function UIButton:touchDone(touch)
     end
 end
 
-function UIButton:onTouchBegan(touch)
+function UIButton:onTouchBegan(touch, event)
     local now = zq.time()
     if self:allowTouch() and self:containsTouch(touch) then
         self:emitBegan()
@@ -360,7 +358,7 @@ function UIButton:onTouchBegan(touch)
     return false
 end
 
-function UIButton:onTouchMoved(touch)
+function UIButton:onTouchMoved(touch, event)
     self:unschedule(self.emitDelay)
     if not self:allowTouch() then
         return
@@ -373,7 +371,7 @@ function UIButton:onTouchMoved(touch)
     self:emitMoving()
 end
 
-function UIButton:onTouchEnded(touch)
+function UIButton:onTouchEnded(touch, event)
     self:unschedule(self.emitLongPress)
     self:unschedule(self.emitDelay)
 

@@ -52,6 +52,7 @@ html = import(".html")
 import(".serialize")
 
 zq.Object = import(".object")
+zq.TouchDispatch = import(".touchdispatch")
 
 
 function fif(condition, if_true, if_false)

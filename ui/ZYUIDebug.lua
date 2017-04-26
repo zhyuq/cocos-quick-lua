@@ -33,7 +33,7 @@ end
 
 function DragDropTestNode:allowDrag(info)
     local rect = cc.rect(0, 0, self:getWidth(), self:getHeight())
-    local check = zq.Touch.checkTouch(self, rect, info:touch()["nowPos"])
+    local check = zq.Touch.checkTouch(self, rect, info:touch():getLocation())
     -- ZQLogD("check %s", tostring(check))
     if check then
         local image = zq.UIImage.new()

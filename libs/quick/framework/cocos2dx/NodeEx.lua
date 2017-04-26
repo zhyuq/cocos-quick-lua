@@ -115,9 +115,12 @@ function Node:removeSelf()
 end
 
 function Node:onEnter()
+    ZQLogD("Node:onEnter")
+    self._destroyed = false
 end
 
 function Node:onExit()
+    self._destroyed = true
 end
 
 function Node:onEnterTransitionFinish()
